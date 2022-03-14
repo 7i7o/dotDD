@@ -48,7 +48,7 @@ async function main() {
     }
 
     console.log(`Setting info on ${domain}.devdao:`)
-    await deployedContract.setInfo(tokenId, info);
+    await deployedContract.setInfo(domain, info);
 
     console.log(`${domain} TokenURI:`)
     console.log(`------------`)

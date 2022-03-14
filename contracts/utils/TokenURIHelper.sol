@@ -4,7 +4,7 @@ pragma solidity 0.8.10;
 import "@openzeppelin/contracts/utils/Strings.sol";
 // import {Base64} from "./Base64.sol";
 import {Base64} from "@openzeppelin/contracts/utils/Base64.sol";
-import "./StructDeclaration.sol";
+import {TLD, DDDInfo} from "./StructDeclaration.sol";
 
 library TokenURIHelper {
     using Strings for uint256;
