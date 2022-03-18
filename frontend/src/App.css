@@ -216,6 +216,17 @@ input:focus {
   text-align: start;
 }
 
+.mint-info-row button{
+  background-image: linear-gradient(
+    to right,
+    white 0%,
+    #aaaaaa 100%,
+  );
+  background-size: 400% 400%;
+  animation: gradient-animation 4s ease infinite;
+  margin-top: 20px;
+
+}
 
 /* Different background-colour for every nth mint-item */
 /* .mint-item:nth-child(2n) {

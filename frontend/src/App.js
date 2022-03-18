@@ -317,13 +317,13 @@ function App() {
   const setAllInfo = (mint) => {
     setTwitter(mint.domainInfo.twitter);
     setShowTwitter(mint.domainInfo.showTwitter);
-    setDiscord(mint.domainInfo.Discord);
+    setDiscord(mint.domainInfo.discord);
     setShowDiscord(mint.domainInfo.showDiscord);
-    setGithub(mint.domainInfo.Github);
+    setGithub(mint.domainInfo.github);
     setShowGithub(mint.domainInfo.showGithub);
-    setUrl(mint.domainInfo.Url);
+    setUrl(mint.domainInfo.url);
     setShowUrl(mint.domainInfo.showUrl);
-    setAddress(mint.domainInfo.Address);
+    setAddress(mint.domainInfo.address);
     setShowAddress(mint.domainInfo.showAddress);
   }
 
@@ -461,7 +461,7 @@ function App() {
                 disabled={!editing}
               />
             </div>
-            {!editing && <button onClick={toggleEditing}>Edit</button>}
+            {!editing && <div className='mint-info-row'><button onClick={toggleEditing}>Edit</button></div>}
             {editing && <div className='mint-info-row'><button onClick={cancelEdit}>Cancel</button><button>Set Info</button></div>}
           </div>
         </div>
