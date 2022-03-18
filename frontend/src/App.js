@@ -9,6 +9,7 @@ import contractABI from './contracts/contract-artifact.json';
 import { ethers } from 'ethers';
 
 import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const tld = '.devdao';
 
@@ -37,10 +38,25 @@ function App() {
   const [network, setNetwork] = useState('');
   const [currentAccount, setCurrentAccount] = useState('');
   const [domain, setDomain] = useState('');
-  const [loading, setLoading] = useState(false);
-  // const [record, setRecord] = useState('');
-  // const [editing, setEditing] = useState(false);
   const [accountDomains, setAccountDomains] = useState([]);
+
+  const [loading, setLoading] = useState(false);
+  const [editing, setEditing] = useState(false);
+
+  const [selectedDomain, setSelectedDomain] = useState(null);
+
+  const [showTwitter, setShowTwitter] = useState(false);
+  const [twitter, setTwitter] = useState('');
+  const [showDiscord, setShowDiscord] = useState(false);
+  const [discord, setDiscord] = useState('');
+  const [showGithub, setShowGithub] = useState(false);
+  const [github, setGithub] = useState('');
+  const [showUrl, setShowUrl] = useState(false);
+  const [url, setUrl] = useState('');
+  const [showAddress, setShowAddress] = useState(false);
+  const [address, setAddress] = useState('');
+  const [showD4R, setShowD4R] = useState(false);
+  const [d4R, setD4R] = useState('');
 
   // Connection
   const connectWallet = async () => {
@@ -209,8 +225,12 @@ function App() {
           setAccountDomains([]);
           return;
         }
+        console.log(`DomainCount ${domainCount}`);
 
-        const domainIds = [...Array(domainCount).keys()];
+        // const domainIds = Array.from(Array(domainCount).keys());
+        const domainIds = Array.from({ length: domainCount }, (v, i) => i);
+
+        console.log(`DomainIds ${domainIds}`);
 
         const domains = await Promise.all(domainIds.map(async (domainIndex) => {
           console.log(`DomainIndex ${domainIndex}`);
@@ -294,19 +314,41 @@ function App() {
     );
   }
 
+  const setAllInfo = (mint) => {
+    setTwitter(mint.domainInfo.twitter);
+    setShowTwitter(mint.domainInfo.showTwitter);
+    setDiscord(mint.domainInfo.Discord);
+    setShowDiscord(mint.domainInfo.showDiscord);
+    setGithub(mint.domainInfo.Github);
+    setShowGithub(mint.domainInfo.showGithub);
+    setUrl(mint.domainInfo.Url);
+    setShowUrl(mint.domainInfo.showUrl);
+    setAddress(mint.domainInfo.Address);
+    setShowAddress(mint.domainInfo.showAddress);
+  }
+
   const renderDomains = () => {
     if (currentAccount && accountDomains.length > 0) {
       return (
         <div className="mint-container">
-          <p className="subtitle"> Your <code>.devdao</code> domains:</p>
+          <p className="subtitle"> Your <code>.devdao</code> domains</p>
           <div className="mint-list">
             {accountDomains.map((mint, index) => {
+              const selectDomain = () => {
+                setSelectedDomain(mint);
+                setAllInfo(mint);
+              }
               return (
                 <div className="mint-item" key={index}>
-                  <div className='mint-row'>
-                    <a className="link" href={`https://testnets.opensea.io/assets/mumbai/${CONTRACT_ADDRESS}/${mint.id}`} target="_blank" rel="noopener noreferrer">
+                  <div className='mint-list'>
+
+                    <button className="link" href="#" onClick={selectDomain}>
                       <p className="underlined"><code>{' '}{mint.name}{tld}{' '}</code></p>
-                    </a>
+                    </button>
+                    {/* <a className="link" href={`https://testnets.opensea.io/assets/mumbai/${CONTRACT_ADDRESS}/${mint.id}`} target="_blank" rel="noopener noreferrer">
+                      <p className="underlined"><code>{' '}{mint.name}{tld}{' '}</code></p>
+                    </a> */}
+
                     {/* If mint.owner is currentAccount, add an "edit" button*/}
                     {/* {mint.owner.toLowerCase() === currentAccount.toLowerCase() ?
                       <button className="edit-button" onClick={() => editRecord(mint.name)}>
@@ -323,6 +365,110 @@ function App() {
         </div>);
     }
   };
+
+  const toggleEditing = () => setEditing(!editing);
+  const cancelEdit = () => {
+    setEditing(false);
+    setSelectedDomain(null);
+  }
+
+  const renderDomainInfo = () => {
+    if (currentAccount && accountDomains.length > 0) {
+      if (!selectedDomain) {
+        return (<p className="subtitle"> No selected domain.</p>);
+      }
+      return (
+        <div className='mint-info-container'>
+          <p className="subtitle"> <code>{selectedDomain.domainInfo.domain}.devdao</code> associated info:</p>
+          <div className='mint-info'>
+            <div className='mint-info-row'>
+              show
+              <input
+                type='checkbox'
+                checked={showTwitter}
+                onChange={e => setShowTwitter(e.target.value)}
+                disabled={!editing}
+              />
+              <input
+                type="text"
+                value={twitter}
+                placeholder='Twitter @username'
+                onChange={e => setTwitter(e.target.value)}
+                disabled={!editing}
+              />
+            </div>
+            <div className='mint-info-row'>
+              show
+              <input
+                type='checkbox'
+                checked={showDiscord}
+                onChange={e => setShowDiscord(e.target.value)}
+                disabled={!editing}
+              />
+              <input
+                type="text"
+                value={discord}
+                placeholder='Discord user#1234'
+                onChange={e => setDiscord(e.target.value)}
+                disabled={!editing}
+              />
+            </div>
+            <div className='mint-info-row'>
+              show
+              <input
+                type='checkbox'
+                checked={showGithub}
+                onChange={e => setShowGithub(e.target.value)}
+                disabled={!editing}
+              />
+              <input
+                type="text"
+                value={github}
+                placeholder='Github profile name'
+                onChange={e => setGithub(e.target.value)}
+                disabled={!editing}
+              />
+            </div>
+            <div className='mint-info-row'>
+              show
+              <input
+                type='checkbox'
+                checked={showUrl}
+                onChange={e => setShowUrl(e.target.value)}
+                disabled={!editing}
+              />
+              <input
+                type="text"
+                value={url}
+                placeholder='Personal Website Url'
+                onChange={e => setUrl(e.target.value)}
+                disabled={!editing}
+              />
+            </div>
+            <div className='mint-info-row'>
+              show
+              <input
+                type='checkbox'
+                checked={showAddress}
+                onChange={e => setShowAddress(e.target.value)}
+                disabled={!editing}
+              />
+              <input
+                type="text"
+                value={address}
+                placeholder='Personal Website Url'
+                onChange={e => setAddress(e.target.value)}
+                disabled={!editing}
+              />
+            </div>
+            {!editing && <button onClick={toggleEditing}>Edit</button>}
+            {editing && <div className='mint-info-row'><button onClick={cancelEdit}>Cancel</button><button>Set Info</button></div>}
+          </div>
+        </div>
+      )
+    }
+  };
+
 
   // Main App Page Render
   return (
@@ -341,7 +487,10 @@ function App() {
         </div>
         {!currentAccount && renderNotConnectedContainer()}
         {currentAccount && renderInputForm()}
-        {accountDomains && renderDomains()}
+        <div className="mints">
+          {accountDomains && renderDomains()}
+          {accountDomains && renderDomainInfo()}
+        </div>
       </div>
     </div>
   );
